@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dojo Wall</title>
+    {% load static %}
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <script src="{% static 'js/script.js' %}"></script>
+    <!-- CSS only -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <!-- new navbar -->
+    <div
+      class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm"
+    >
+      <h5 class="my-0 mr-md-auto font-weight-normal">Test App</h5>
+      <nav class="my-2 my-md-0 mr-md-3">
+        <a class="p-2 text-dark" href="/dashboard"
+          >Welcome, {{logged_in_user.first_name}}</a
+        >
+        <a class="p-2 text-dark" href="/dashboard">Home</a>
+        <a class="p-2 text-dark" href="#">Profile</a>
+        <a class="p-2 text-dark" href="{% url 'dashboard:my_index' %}"
+          >Dashboard</a
+        >
+      </nav>
+      <a class="btn btn-outline-primary" href="/log_out">Sign Out</a>
+    </div>
+    <!-- header -->
+    <div class="header">
+      <h2>{{user.first_name}}'s Wall</h2>
+      <p>Welcome! Please leave a message for {{user.first_name}}.</p>
+    </div>
+    <hr />
+    <div class="description">
+      <h4>{{user.first_name}} {{user.last_name}}</h4>
+      <p><strong>User ID: </strong> {{user.id}}</p>
+      <p><strong>Email Address: </strong> {{user.email}}</p>
+      <p><strong>Description: </strong> {{user.description}}</p>
+    </div>
+
+    <div class="post">
+      <form
+        action="{% url 'dojo_wall:new_message' user.id %}"
+        method="POST"
+        id="message_box"
+      >
+        {%csrf_token%}
+        <br />
+        <textarea
+          name="message"
+          cols="100"
+          rows="10"
+          placeholder="Please leave a message here."
+        ></textarea
+        ><br />
+        <input type="hidden" name="user_id" value="{{user.id}}" />
+        <button type="submit" class="primary">Post a message</button>
+      </form>
+    </div>
+    <!-- display errors -->
+
+    <div class="messages_all">
+      {% if messages %}
+      <ul id="error_list" class="messages_list">
+        {% for message in messages %}
+        <li {% if message.tags %} class="{{message.tags}}" {% endif %}>
+          {{message}}
+        </li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+    </div>
+    <br />
+    <div class="messages">
+      {% for message in all_messages reversed %} {% if user != message.user %}
+      <!-- <h1>user is: {{user.first_name}}</h1>
+      <h1>logged in user is : {{logged_in_user.first_name}}</h1>
+      <h1>message.user is: {{message.user.first_name}}</h1> -->
+
+      <p>
+        <strong id="user"
+          >{{message.user.first_name}} {{message.user.last_name}}</strong
+        >
+        posted on {{message.created_at}}
+      </p>
+      <p>
+        {{message.message}}
+        <a href="{% url 'dojo_wall:my_wall' user.id %}" id="reply">reply</a>
+        {% if message.user == logged_in_user%}
+        <a href="/{{message.id}}/delete_message/{{user.id}}" id="delete"
+          >delete</a
+        >
+
+        > {% endif%}
+      </p>
+      <hr />
+      {% endif %} {% endfor %}
+    </div>
+  </body>
+</html>

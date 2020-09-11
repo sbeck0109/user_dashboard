@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    {% load static %}
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <script src="{% static 'js/script.js' %}"></script>
+    <!-- CSS only -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+      crossorigin="anonymous"
+    />
+  </head>
+
+  <body>
+    <!-- new navbar -->
+    <div
+      class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm"
+    >
+      <h5 class="my-0 mr-md-auto font-weight-normal">Test App</h5>
+      <nav class="my-2 my-md-0 mr-md-3">
+        <a class="p-2 text-dark" href="/dashboard"
+          >Welcome, {{this_user.first_name}}</a
+        >
+        <a class="p-2 text-dark" href="/dashboard">Home</a>
+        <a class="p-2 text-dark" href="#">Profile</a>
+        <a class="p-2 text-dark" href="{% url 'dashboard:my_index' %}"
+          >Dashboard</a
+        >
+      </nav>
+      <a class="btn btn-outline-primary" href="/log_out">Sign Out</a>
+    </div>
+    <!-- error messages -->
+    <div class="messages_all">
+      {% if messages %}
+      <ul id="error_list" class="messages_list">
+        {% for message in messages %}
+        <li {% if message.tags %} class="{{message.tags}}" {% endif %}>
+          {{message}}
+        </li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+    </div>
+    <br />
+
+    <div class="reg">
+      <h3>Edit Information</h3>
+      <form
+        action="/dashboard/users/{{this_user.id}}/update"
+        method="POST"
+        id="reg_form"
+      >
+        {% csrf_token %}
+        <label for="first_name">First Name</label><br />
+        <input
+          type="text"
+          name="first_name"
+          placeholder="{{this_user.first_name}}"
+        /><br />
+        <label for="last_name">Last Name</label><br />
+        <input
+          type="text"
+          name="last_name"
+          placeholder="{{this_user.last_name}}"
+        /><br />
+        <label for="email">Email</label><br />
+        <input
+          type="text"
+          name="email"
+          placeholder="{{this_user.email}}"
+        /><br />
+        <label for="description">Description</label><br />
+        <textarea
+          name="description"
+          id=""
+          cols="30"
+          rows="10"
+          placeholder="Tell me a little bit about yourself!"
+        ></textarea
+        ><br />
+        <button class="btn_reg">Update</button>
+      </form>
+    </div>
+    <!-- change password -->
+    <div class="login">
+      <h3>Change Password</h3>
+      <form action="#" method="POST" id="login_form">
+        {% csrf_token %}
+        <label for="password">New Password</label><br />
+        <input type="password" name="password" /><br />
+        <label for="confirm_password">Confirm New Password</label><br />
+        <input type="password" name="confirm_password" /><br />
+        <button class="btn_login">Update Password</button>
+      </form>
+    </div>
+  </body>
+</html>

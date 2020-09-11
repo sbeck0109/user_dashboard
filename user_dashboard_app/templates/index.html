@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <!-- CSS only -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous" />
+</head>
+
+<body>
+  <!-- navbar -->
+  <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+    <h5 class="my-0 mr-md-auto font-weight-normal">Test App</h5>
+    <nav class="my-2 my-md-0 mr-md-3">
+      <a class="p-2 text-dark" href="/dashboard">Welcome, {{this_user.first_name}}</a>
+      <a class="p-2 text-dark" href="/dashboard">Home</a>
+      <a class="p-2 text-dark" href="#">Profile</a>
+      <a class="p-2 text-dark" href="#">Dashboard</a>
+    </nav>
+    <a class="btn btn-outline-primary" href="/signin">Sign Out</a>
+  </div>
+  <!-- users table -->
+  <div class="table-responsive-lg">
+    <h2>Section title</h2>
+    <table class="table table-striped table-md">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Created_at</th>
+          <th>User_level</th>
+
+        </tr>
+      </thead>
+      <tbody>
+        {% for user in all_users %}
+        <tr>
+          <td><a href="{% url 'dojo_wall:my_user_info' user.id %}">{{user.last_name}}, {{user.first_name}}</a>
+          <td>{{user.email}}</td>
+          <td>{{user.created_at}}</td>
+          <td>{{user.level}}</td>
+
+          {% endfor %}
+        </tr>
+      </tbody>
+    </table>
+    <hr>
+
+    <a href="users/{{this_user.id}}/edit">Edit my information</a>
+</body>
+
+</html>
